@@ -21,7 +21,10 @@ class DockingPossLoss(UnicoreLoss):
         3) logging outputs to display while training
         """
         net_outputs = model(**sample["net_input"])
-        cross_distance_predict, holo_distance_predict = net_outputs[0], net_outputs[1]
+
+        # NOTE(hadim): catching additional outputs here
+        cross_distance_predict = net_outputs.pop("cross_distance_predict")
+        holo_distance_predict = net_outputs.pop("holo_distance_predict")
 
         ### distance loss
         distance_mask = sample["target"]["distance_target"].ne(0)  # 0 is padding
@@ -83,6 +86,10 @@ class DockingPossLoss(UnicoreLoss):
             logging_output["pocket_coordinates"] = (
                 sample["net_input"]["pocket_src_coord"].data.detach().cpu()
             )
+
+            # NOTE(hadim): additional outputs
+            representations = {k: v.detach().cpu() for k, v in net_outputs.items()}
+            logging_output.update(representations)
 
         return loss, 1, logging_output
 

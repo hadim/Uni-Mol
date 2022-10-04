@@ -124,6 +124,13 @@ class RemoveHydrogenPocketDataset(BaseWrapperDataset):
         coordinates = dd[self.coordinates]
         holo_coordinates = dd[self.holo_coordinates]
 
+        # NOTE(hadim): me debugging stuff
+        # print("*** START - ", self.atoms)
+        # print("coordinates", coordinates.shape)
+        # print("holo_coordinates", holo_coordinates.shape)
+        # print("atoms", atoms.shape)
+        # print("*** END - ", self.atoms)
+
         if self.remove_hydrogen:
             mask_hydrogen = atoms != "H"
             atoms = atoms[mask_hydrogen]

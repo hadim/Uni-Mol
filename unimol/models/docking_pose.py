@@ -204,7 +204,19 @@ class DockingPoseModel(BaseUnicoreModel):
             holo_encoder_pair_rep
         )  # batch, mol_sz, mol_sz
 
-        return cross_distance_predict, holo_distance_predict
+        # return cross_distance_predict, holo_distance_predict
+
+        # NOTE(hadim): returning more things here (potentially breaking changes)
+        outputs = {}
+        outputs["cross_distance_predict"] = cross_distance_predict
+        outputs["holo_distance_predict"] = holo_distance_predict
+        outputs["cross_rep"] = cross_rep
+        outputs["holo_encoder_pair_rep"] = holo_encoder_pair_rep
+        outputs["mol_decoder"] = mol_decoder
+        outputs["pocket_decoder"] = pocket_decoder
+        outputs["mol_pair_decoder_rep"] = mol_pair_decoder_rep
+        outputs["mol_pocket_pair_decoder_rep"] = mol_pocket_pair_decoder_rep
+        return outputs
 
     def set_num_updates(self, num_updates):
         """State from trainer to pass along to model at every update."""
